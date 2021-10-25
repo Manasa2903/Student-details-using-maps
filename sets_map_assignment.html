@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment</title>
+    <style>
+        .form-container {
+            display: flex;
+        }
+        
+        .student-details {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+            border-right: chocolate 2px solid;
+            margin-right: 20px;
+        }
+        
+        .map-details {
+            width: 40%;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input {
+            display: block;
+            width: 200px;
+            height: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .button {
+            background-color: chocolate;
+            color: cornsilk;
+            border: 0;
+            height: 35px;
+            width: 90px;
+            margin-bottom: 20px;
+        }
+        
+        .label {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .table {
+            width: 38%;
+            border-collapse: collapse;
+            background-color: white;
+            margin-bottom: 50px;
+        }
+        
+        td {
+            height: 45px;
+            text-align: center;
+        }
+        
+        th {
+            background: rgb(148, 173, 173);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Student Details</h1>
+    <div class="form-container">
+
+        <div class="student-details">
+            <label for="name" class="label">Name</label>
+            <input type="text" id="name" placeholder="Enter Name" class="input" />
+
+            <label for="age" class="label">Age</label>
+            <input type="text" id="age" placeholder="Enter age" class="input" />
+
+            <button id="submit" class="button">Submit</button>
+        </div>
+
+        <div class="map-details">
+
+            <label for="del" class="label">Enter Value to be deleted</label>
+            <input type="text" id="del" placeholder="Enter Value" class="input" />
+            <button id="delete" class="button">Delete</button>
+
+            <label for="find" class="label">Find Value</label>
+            <input type="text" id="find" placeholder="Enter Value" class="input" />
+            <button id="findBtn" class="button">Find</button>
+
+            <label class="label">Clear Values</label>
+            <button id="clear" class="button">Clear</button>
+
+        </div>
+    </div>
+
+    <table id="table" border="1" class="table">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+    </table>
+
+    <script>
+        let nameField = document.getElementById("name");
+        let ageField = document.getElementById("age");
+        let table = document.getElementById("table");
+        let submitBtn = document.getElementById("submit");
+        let deleteBtn = document.getElementById("delete");
+        let findBtn = document.getElementById("findBtn")
+        let clearBtn = document.getElementById("clear");
+        let deleteField = document.getElementById("del");
+        let findField = document.getElementById("find");
+        let mapValues = document.getElementById("mapValues");
+
+        let studentDetails = new Map()
+        let studentDetails2 = new Map()
+
+
+
+        function addTable(name, age) {
+            let tableRow = document.createElement("tr");
+            let tableName = document.createElement("td");
+            let tableAge = document.createElement("td");
+            tableRow.setAttribute("id", name);
+            tableRow.setAttribute("class", "studentValues");
+
+            tableName.textContent = name;
+            tableAge.textContent = age;
+
+            tableRow.appendChild(tableName);
+            tableRow.appendChild(tableAge);
+
+            return tableRow;
+
+        }
+
+        submitBtn.addEventListener("click", function() {
+            studentDetails.set(nameField.value, ageField.value);
+            studentDetails2.set(nameField.value, ageField.value);
+            for (let [key, value] of studentDetails) {
+                let newTableRow = addTable(key, value);
+                table.appendChild(newTableRow);
+            }
+            console.log(studentDetails2);
+
+            studentDetails.clear();
+
+            nameField.value = ""
+            ageField.value = ""
+
+
+            /* */
+
+        });
+
+        function deleteValue() {
+            studentDetails2.delete(deleteField.value);
+            console.log("Student Deleted");
+
+            table.removeChild(document.getElementById(deleteField.value));
+
+            return studentDetails2;
+        }
+
+        deleteBtn.addEventListener("click", function() {
+            let is_present = studentDetails2.has(deleteField.value);
+            is_present ? console.log(deleteValue()) : console.log(`There is no student named ${deleteField.value}`);
+            deleteField.value = ""
+
+        })
+
+        findBtn.addEventListener("click", function() {
+            let is_present = studentDetails2.has(findField.value);
+            is_present ? console.log("Student is Present") : console.log("Student is not Present");
+            findField.value = "";
+        })
+
+
+        clearBtn.addEventListener("click", function() {
+            studentDetails2.clear();
+            console.log("Students Cleared");
+            console.log(studentDetails2);
+
+            while (table.childNodes.length > 2) {
+                table.removeChild(table.lastChild);
+            }
+
+        })
+    </script>
+</body>
+
+</html>
